@@ -1,21 +1,10 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <math.h>
 #include "Example.h"
 
-// Function that takes IN struct and returns OUT struct
-struct OUT process_data(struct IN input) {
-    printf("Inside the method\n");
-    
-    // Create an empty OUT struct to return
-    struct OUT result;
-    result.poz.X = 0.0;
-    result.poz.Y = 0.0;
-    result.poz.Z = 0.0;
-    result.field2 = false;
-    result.field3 = 0.0;
-    
-    return result;
-}
+// Function prototype - declare the function before using it
+struct OUT process_data(struct IN input);
 
 // Simple main function to test the code
 int main() {
@@ -34,4 +23,36 @@ int main() {
     printf("Result: X=%f, Y=%f, Z=%f\n", result.poz.X, result.poz.Y, result.poz.Z);
     
     return 0;
-} 
+}
+
+// Function implementation
+struct OUT process_data(struct IN input) {
+    printf("Inside the method\n");
+    printf("Input values: field2=%d, field3=%f\n", input.field2, input.field3);
+    
+    // Create an OUT struct with values calculated from input
+    struct OUT result;
+    
+    // Calculate X as sum of first 5 elements in polyX array
+    result.poz.X = 0.0;
+    for (int i = 0; i < 5 && i < CONST_16; i++) {
+        result.poz.X += input.polyX[i];
+    }
+    
+    // Calculate Y as input.field2 * 0.1
+    result.poz.Y = input.field2 * 0.1;
+    
+    // Calculate Z as input.field3 * 2
+    result.poz.Z = input.field3 * 2.0;
+    
+    // Set field2 based on whether field2 input is even or odd
+    result.field2 = (input.field2 % 2 == 0);
+    
+    // Set field3 as square root of input.field3
+    result.field3 = sqrt(input.field3);
+    
+    printf("Calculated output: X=%f, Y=%f, Z=%f\n", 
+           result.poz.X, result.poz.Y, result.poz.Z);
+    
+    return result;
+}

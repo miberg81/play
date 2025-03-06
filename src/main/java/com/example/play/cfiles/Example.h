@@ -1,13 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-// Define bool type if stdbool.h is not available
-#ifndef __bool_true_false_are_defined
-typedef int bool;
-#define true 1
-#define false 0
-#define __bool_true_false_are_defined 1
-#endif
+#include <stdbool.h>  // Use the standard stdbool.h
 
 #define CONST_10 10
 #define CONST_16 16
