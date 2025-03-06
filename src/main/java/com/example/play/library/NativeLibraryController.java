@@ -1,6 +1,5 @@
-package com.example.play.controllers;
+package com.example.play.library;
 
-import com.example.play.cfiles.NativeLibrary;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

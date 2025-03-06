@@ -1,4 +1,4 @@
-package com.example.play.cfiles;
+package com.example.play.library;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
