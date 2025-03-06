@@ -2,6 +2,7 @@ package com.example.play.cfiles;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
+import java.lang.reflect.Field;
 
 public class NativeLibrary {
     // Memory layouts for our C structures
@@ -14,12 +15,14 @@ public class NativeLibrary {
     private static final MemoryLayout IN_LAYOUT = MemoryLayout.structLayout(
         MemoryLayout.sequenceLayout(16, ValueLayout.JAVA_DOUBLE).withName("polyX"),
         ValueLayout.JAVA_INT.withName("field2"),
+        MemoryLayout.paddingLayout(4), // Add padding to ensure proper alignment for the double
         ValueLayout.JAVA_DOUBLE.withName("field3")
     );
     
     private static final MemoryLayout OUT_LAYOUT = MemoryLayout.structLayout(
         POS_LAYOUT.withName("poz"),
         ValueLayout.JAVA_BOOLEAN.withName("field2"),
+        MemoryLayout.paddingLayout(7), // Add padding to ensure proper alignment for the double
         ValueLayout.JAVA_DOUBLE.withName("field3")
     );
     
@@ -42,7 +45,32 @@ public class NativeLibrary {
     // Load the native library and get the function handle
     static {
         try {
-            System.loadLibrary("Example");
+            // Set the library path to include the project directory
+            String libraryPath = System.getProperty("user.dir");
+            System.setProperty("java.library.path", libraryPath);
+            
+            // This hack is needed to force Java to reload the library paths
+            try {
+                Field field = ClassLoader.class.getDeclaredField("sys_paths");
+                field.setAccessible(true);
+                field.set(null, null);
+            } catch (Exception e) {
+                System.err.println("Failed to reset library path: " + e.getMessage());
+            }
+            
+            // Try to load the library with platform-specific naming
+            try {
+                if (System.getProperty("os.name").toLowerCase().contains("win")) {
+                    System.load(libraryPath + "/Example.dll");
+                } else if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+                    System.load(libraryPath + "/libExample.dylib");
+                } else {
+                    System.load(libraryPath + "/libExample.so");
+                }
+            } catch (UnsatisfiedLinkError e) {
+                // Fallback to loadLibrary which uses java.library.path
+                System.loadLibrary("Example");
+            }
             
             SymbolLookup symbolLookup = SymbolLookup.loaderLookup();
             Linker linker = Linker.nativeLinker();

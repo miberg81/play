@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "Example.h"
 
 // Function that takes IN struct and returns OUT struct
