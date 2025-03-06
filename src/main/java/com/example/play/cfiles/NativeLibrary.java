@@ -2,7 +2,6 @@ package com.example.play.cfiles;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
-import java.lang.reflect.Field;
 
 public class NativeLibrary {
     // Memory layouts for our C structures
@@ -48,15 +47,6 @@ public class NativeLibrary {
             // Set the library path to include the project directory
             String libraryPath = System.getProperty("user.dir");
             System.setProperty("java.library.path", libraryPath);
-            
-            // This hack is needed to force Java to reload the library paths
-            try {
-                Field field = ClassLoader.class.getDeclaredField("sys_paths");
-                field.setAccessible(true);
-                field.set(null, null);
-            } catch (Exception e) {
-                System.err.println("Failed to reset library path: " + e.getMessage());
-            }
             
             // Try to load the library with platform-specific naming
             try {

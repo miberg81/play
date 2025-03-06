@@ -6,7 +6,6 @@
 // Function prototype - declare the function before using it
 struct OUT process_data(struct IN input);
 
-// Simple main function to test the code
 int main() {
     // Create a test IN struct
     struct IN input;
@@ -39,16 +38,13 @@ struct OUT process_data(struct IN input) {
         result.poz.X += input.polyX[i];
     }
     
-    // Calculate Y as input.field2 * 0.1
     result.poz.Y = input.field2 * 0.1;
     
-    // Calculate Z as input.field3 * 2
     result.poz.Z = input.field3 * 2.0;
     
     // Set field2 based on whether field2 input is even or odd
     result.field2 = (input.field2 % 2 == 0);
     
-    // Set field3 as square root of input.field3
     result.field3 = sqrt(input.field3);
     
     printf("Calculated output: X=%f, Y=%f, Z=%f\n", 
