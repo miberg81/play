@@ -122,8 +122,15 @@ public class NativeLibrary {
             inSegment.set(ValueLayout.JAVA_INT, IN_FIELD2_OFFSET, input.field2);
             inSegment.set(ValueLayout.JAVA_DOUBLE, IN_FIELD3_OFFSET, input.field3);
             
-            // Call the native function
-            MemorySegment outSegment = (MemorySegment) PROCESS_DATA.invoke(inSegment);
+            // Allocate memory for the output struct
+            MemorySegment outSegment = arena.allocate(OUT_LAYOUT);
+            
+            try {
+                // Call the native function with the arena as the allocator
+                outSegment = (MemorySegment) PROCESS_DATA.invokeExact(arena, inSegment);
+            } catch (Throwable e) {
+                throw new RuntimeException("Error invoking native function", e);
+            }
             
             // Convert the result to Java object
             OUT result = new OUT();
