@@ -126,8 +126,8 @@ public class NativeLibrary {
             MemorySegment outSegment = arena.allocate(OUT_LAYOUT);
             
             try {
-                // Call the native function with the arena as the allocator
-                outSegment = (MemorySegment) PROCESS_DATA.invokeExact(arena, inSegment);
+                // Cast arena to SegmentAllocator for exact type matching
+                outSegment = (MemorySegment) PROCESS_DATA.invokeExact((SegmentAllocator)arena, inSegment);
             } catch (Throwable e) {
                 throw new RuntimeException("Error invoking native function", e);
             }
