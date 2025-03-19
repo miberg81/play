@@ -12,7 +12,7 @@ import java.util.Arrays;
 @RequestMapping("native")
 public class NativeLibraryController {
 
-    @GetMapping("/test")
+    @GetMapping("/test-ffm")
     public String testNativeLibrary() {
         try {
             // Create input structure
@@ -27,7 +27,7 @@ public class NativeLibraryController {
             NativeLibrary.OUT result = NativeLibrary.processData(input);
             
             // Return the results
-            return String.format("Native call successful! Result: X=%f, Y=%f, Z=%f", 
+            return String.format("FFM call successful! Result: X=%f, Y=%f, Z=%f",
                     result.poz.X, result.poz.Y, result.poz.Z);
         } catch (Exception e) {
             return "Error calling native library: " + e.getMessage() + "\n" + 
