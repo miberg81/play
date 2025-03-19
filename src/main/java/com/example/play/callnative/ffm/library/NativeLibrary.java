@@ -1,4 +1,4 @@
-package com.example.play.library;
+package com.example.play.callnative.ffm.library;
 
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
