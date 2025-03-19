@@ -15,24 +15,22 @@ src/main/java/com/example/play/callnative/
 
 ## Build Process
 
-### 1. Compile Java Class
-First, compile the Java class [JniLibrary] to generate the JNI header file:
-
-Run this "compile" command from your project root (will compile .java class to .class files in the specified output folder):
+### 1. Compile JniLibrary.java to Generate JNI Header File and .class files
 [bash]
 javac -h src/main/java/com/example/play/callnative/jni/library src/main/java/com/example/play/callnative/jni/library/JniLibrary.java
+Run this "compile" command from your project root:
+1. Compiles JniLibrary.java and its inner classes (IN, OUT, Pos) to .class files
+2. Generates the JNI header file based on your Java class
+This will generate:
+1. Class files:
+   - JniLibrary.class
+   - JniLibrary$IN.class
+   - JniLibrary$OUT.class
+   - JniLibrary$Pos.class
+2. Header file:
+   - com_example_play_callnative_jni_library_JniLibrary.h
 
-Run this "gcc" command to get the **ExampleJni.dll** 
-[CMD/windows]
-gcc -I"%JAVA_HOME%\include" ^
--I"%JAVA_HOME%\include\win32" ^
--I"src/main/java/com/example/play/callnative/cfiles" ^
--shared ^
--Wl,--add-stdcall-alias ^
-src/main/java/com/example/play/callnative/jni/library/JniLibrary.c ^
-src/main/java/com/example/play/callnative/cfiles/Example.c ^
--o ExampleJni.dll
-
+### 2. Run this "gcc" command to get the **ExampleJni.dll**
 [bash (MSYS2/MinGW) on Windows ]
 gcc -I"$JAVA_HOME/include" \
 -I"$JAVA_HOME/include/win32" \

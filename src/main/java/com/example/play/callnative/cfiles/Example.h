@@ -25,4 +25,7 @@ struct OUT {
     double field3;
 };
 
+// Need to add this function declaration
+struct OUT process_data(struct IN input);
+
 #endif
