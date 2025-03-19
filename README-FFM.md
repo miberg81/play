@@ -51,13 +51,13 @@ Step 7: Build Your DLL
 Navigate to your project directory and run:
 
 [windows]
-gcc -shared -o Example.dll src/main/java/com/example/play/cfiles/Example.c
+gcc -shared -o Example.dll src/main/java/com/example/play/callnative/cfiles/Example.c
 
 [linux]
-gcc -shared -o Example.so src/main/java/com/example/play/cfiles/Example.c
+gcc -shared -o Example.so src/main/java/com/example/play/callnative/cfiles/Example.c
 
 [macos]
-gcc -shared -fPIC -o libExample.dylib src/main/java/com/example/play/cfiles/Example.c
+gcc -shared -fPIC -o libExample.dylib src/main/java/com/example/play/callnative/cfiles/Example.c
 
 This will create the Example.dll file in your project root directory, which can then be used with your Java FFM code.
 
