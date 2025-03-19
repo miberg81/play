@@ -2,14 +2,26 @@
 
 This guide explains how to build and use the JNI implementation of the native library.
 
-## File Structure
-src/main/java/com/example/play/callnative/
+## FILE_GENERATION_FLOW
+Original Files:
+└── src/main/java/com/example/play/callnative/
 ├── cfiles/
-│ ├── Example.h # Original C header file
-│ └── Example.c # Original C implementation
+│   ├── Example.h        # Original C header file (original)
+│   └── Example.c        # Original C implementation (original)
 └── jni/library/
-├── JniLibrary.java # Java JNI wrapper class
-└── JniLibrary.c # JNI implementation
+      ├── JniLibrary.java  # Java JNI wrapper class (original)
+      └── JniLibrary.c     # JNI implementation (original)
+
+Command 1 (javac) generates:
+└── src/main/java/com/example/play/callnative/jni/library/
+├── JniLibrary.class
+├── JniLibrary$IN.class
+├── JniLibrary$OUT.class
+├── JniLibrary$Pos.class
+└── com_example_play_callnative_jni_library_JniLibrary.h
+
+Command 2 (gcc) generates:
+└── ExampleJni.dll          (in project root)
 
 ****
 
@@ -18,6 +30,7 @@ src/main/java/com/example/play/callnative/
 ### 1. Compile JniLibrary.java to Generate JNI Header File and .class files
 [bash]
 javac -h src/main/java/com/example/play/callnative/jni/library src/main/java/com/example/play/callnative/jni/library/JniLibrary.java
+
 Run this "compile" command from your project root:
 1. Compiles JniLibrary.java and its inner classes (IN, OUT, Pos) to .class files
 2. Generates the JNI header file based on your Java class
@@ -184,3 +197,4 @@ Place the generated library file (ExampleJni.dll/libExampleJni.so/libExampleJni.
 4. **Build Verification**
     - Use `nm` (Linux/macOS) or `dumpbin` (Windows) to verify symbols
     - Check library dependencies with `ldd` (Linux) or `depends.exe` (Windows)
+
