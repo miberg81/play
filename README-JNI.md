@@ -16,12 +16,14 @@ src/main/java/com/example/play/callnative/
 ## Build Process
 
 ### 1. Compile Java Class
-First, compile the Java class to generate the JNI header file:
+First, compile the Java class [JniLibrary] to generate the JNI header file:
 
-bash:src/main/java/com/example/play/callnative/jni/library/JniLibrary.java
+Run this "compile" command from your project root (will compile .java class to .class files in the specified output folder):
+[bash]
 javac -h src/main/java/com/example/play/callnative/jni/library src/main/java/com/example/play/callnative/jni/library/JniLibrary.java
 
-bash
+Run this "gcc" command to get the **ExampleJni.dll** 
+[CMD/windows]
 gcc -I"%JAVA_HOME%\include" ^
 -I"%JAVA_HOME%\include\win32" ^
 -I"src/main/java/com/example/play/callnative/cfiles" ^
@@ -31,7 +33,44 @@ src/main/java/com/example/play/callnative/jni/library/JniLibrary.c ^
 src/main/java/com/example/play/callnative/cfiles/Example.c ^
 -o ExampleJni.dll
 
-bash
+[bash (MSYS2/MinGW) on Windows ]
+gcc -I"$JAVA_HOME/include" \
+-I"$JAVA_HOME/include/win32" \
+-I"src/main/java/com/example/play/callnative/cfiles" \
+-shared \
+-Wl,--add-stdcall-alias \
+src/main/java/com/example/play/callnative/jni/library/JniLibrary.c \
+src/main/java/com/example/play/callnative/cfiles/Example.c \
+-o ExampleJni.dll
+
+/****************start gcc command for win explanation*******************************/
+# Include paths for JNI headers
+-I"%JAVA_HOME%\include"           # Core JNI headers (jni.h)
+-I"%JAVA_HOME%\include\win32"     # Windows-specific JNI headers
+-I"src/main/java/com/example/play/callnative/cfiles"  # Path to Example.h
+
+# Library creation flags
+-shared                           # Create a shared library (DLL on Windows)
+-Wl,--add-stdcall-alias          # Windows-specific: handle function name decorations
+
+# Source files to compile
+src/main/java/com/example/play/callnative/jni/library/JniLibrary.c  # JNI wrapper
+src/main/java/com/example/play/callnative/cfiles/Example.c          # Your C implementation
+
+# Output
+-o ExampleJni.dll                 # Name of the output DLL file
+
+Key points:
+1. Compiles both C files together (JniLibrary.c and Example.c)
+   Creates a DLL that contains both your C code and the JNI wrapper
+   -shared makes it a DLL instead of an executable
+   Include paths ensure the compiler can find all necessary header files
+   The resulting ExampleJni.dll is what Java will load at runtime
+   This is different from the FFM approach where you only compile Example.c into Example.dll.
+
+2. /****************end of gcc command for win explanation*******************************/
+
+[bash/linux]
 gcc -I"$JAVA_HOME/include" \
 -I"$JAVA_HOME/include/linux" \
 -I"src/main/java/com/example/play/callnative/cfiles" \
@@ -40,7 +79,7 @@ src/main/java/com/example/play/callnative/jni/library/JniLibrary.c \
 src/main/java/com/example/play/callnative/cfiles/Example.c \
 -o libExampleJni.so
 
-bash
+[bash/mac]
 gcc -I"$JAVA_HOME/include" \
 -I"$JAVA_HOME/include/darwin" \
 -I"src/main/java/com/example/play/callnative/cfiles" \
@@ -130,10 +169,9 @@ Place the generated library file (ExampleJni.dll/libExampleJni.so/libExampleJni.
 ## Debugging Tips
 
 1. **Library Loading**
-   ```java
+   java
    System.load(absolutePath) // Use for full path
    System.loadLibrary(name)  // Uses java.library.path
-   ```
 
 2. **Common JNI Signatures**
     - `()V` - void method with no parameters

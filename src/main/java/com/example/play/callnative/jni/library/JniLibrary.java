@@ -6,7 +6,7 @@ public class JniLibrary {
         try {
             String libraryPath = System.getProperty("user.dir");
             System.setProperty("java.library.path", libraryPath);
-            
+
             try {
                 if (System.getProperty("os.name").toLowerCase().contains("win")) {
                     System.load(libraryPath + "/ExampleJni.dll");
@@ -29,13 +29,13 @@ public class JniLibrary {
         public double Y;
         public double Z;
     }
-    
+
     public static class IN {
         public double[] polyX = new double[16];
         public int field2;
         public double field3;
     }
-    
+
     public static class OUT {
         public Pos poz = new Pos();
         public boolean field2;
@@ -44,4 +44,4 @@ public class JniLibrary {
 
     // Native method declaration
     public native OUT processData(IN input);
-} 
+}

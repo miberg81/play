@@ -1,12 +1,12 @@
 #include <jni.h>
-#include "../../cfiles/Example.h"
+#include "Example.h"
 #include <string.h>
 
-JNIEXPORT jobject JNICALL Java_com_example_play_callnative_jni_library_JniLibrary_processData
+JNIEXPORT jobject JNICALL Java_com_example_play_callnative_jni_library_javaclass_JniLibrary_processData
   (JNIEnv *env, jobject thisObj, jobject input) {
     
     // Get the input class
-    jclass inClass = (*env)->GetObjectClass(env, input);
+    jclass inClass = (*env)->FindClass(env, "com/example/play/callnative/jni/library/javaclass/IN");
     
     // Get field IDs for IN class
     jfieldID polyXFieldId = (*env)->GetFieldID(env, inClass, "polyX", "[D");
@@ -31,12 +31,12 @@ JNIEXPORT jobject JNICALL Java_com_example_play_callnative_jni_library_JniLibrar
     struct OUT cOutput = process_data(cInput);
     
     // Create Java OUT object
-    jclass outClass = (*env)->FindClass(env, "com/example/play/callnative/jni/library/JniLibrary$OUT");
+    jclass outClass = (*env)->FindClass(env, "com/example/play/callnative/jni/library/javaclass/OUT");
     jmethodID outConstructor = (*env)->GetMethodID(env, outClass, "<init>", "()V");
     jobject result = (*env)->NewObject(env, outClass, outConstructor);
     
     // Get Pos class and create Pos object
-    jclass posClass = (*env)->FindClass(env, "com/example/play/callnative/jni/library/JniLibrary$Pos");
+    jclass posClass = (*env)->FindClass(env, "com/example/play/callnative/jni/library/javaclass/Pos");
     jmethodID posConstructor = (*env)->GetMethodID(env, posClass, "<init>", "()V");
     jobject pos = (*env)->NewObject(env, posClass, posConstructor);
     
@@ -50,7 +50,7 @@ JNIEXPORT jobject JNICALL Java_com_example_play_callnative_jni_library_JniLibrar
     (*env)->SetDoubleField(env, pos, zFieldId, cOutput.poz.Z);
     
     // Set OUT fields
-    jfieldID pozFieldId = (*env)->GetFieldID(env, outClass, "poz", "Lcom/example/play/callnative/jni/library/JniLibrary$Pos;");
+    jfieldID pozFieldId = (*env)->GetFieldID(env, outClass, "poz", "Lcom/example/play/callnative/jni/library/javaclass/Pos;");
     jfieldID outField2Id = (*env)->GetFieldID(env, outClass, "field2", "Z");
     jfieldID outField3Id = (*env)->GetFieldID(env, outClass, "field3", "D");
     
