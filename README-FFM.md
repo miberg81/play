@@ -1,3 +1,40 @@
+COMPARE FFM/JNI
+=================
+Let me check the history of FFM implementation:
+You provided Example.h first, which defined the structures (IN, OUT, Pos)
+Then I helped create Example.c with the implementation of process_data
+We compiled it with a simple gcc command to create Example.dll:
+
+gcc -shared -o Example.dll src/main/java/com/example/play/callnative/cfiles/Example.c
+
+The FFM approach was simpler because:
+1. We only needed to create one DLL (Example.dll)
+2. No JNI wrapper code was needed
+3. No header generation was needed
+4. No special include paths were needed
+
+In contrast, for JNI we need:
+1. Generate JNI header from Java
+2. Create JNI wrapper code (JniLibrary.c)
+Compile both Example.c and JniLibrary.c together
+Include JNI headers in the compilation
+Would you like me to show the exact sequence of files we created for FFM vs JNI?
+
+WHEN NEED TO RECOMPILE THE DLL
+===========================================================================
+You don't have to recreate the bankAcount.dll if:
+1. You haven't changed any C code (bankAcount.c or bankAcount.h)
+2. The existing bankAcount.dll was already compiled correctly
+We're only fixing the Java side (NativeLibraryBankAcount.java) to match the memory layout that the C compiler used when creating the DLL. The changes we're making are:
+- Adjusting padding and alignment in memory layouts
+- Making sure struct sizes match between Java and C
+- Not changing any functionality
+You would need to recompile the DLL only if you:
+1. Change bankAcount.h structures
+2. Modify bankAcount.c implementation
+3. Want to change the C-side memory layout
+===================================================
+
 installing MinGW-w64 with MSYS2
 =======================================================================
 The command you mentioned is for MSYS2, which is a package management system that allows you to install MinGW-w64 (including the latest version 11) easily. The command itself doesn't change based on which version of MinGW-w64 you want - MSYS2 will install the latest available version by default.
